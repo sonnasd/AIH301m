@@ -1,0 +1,9 @@
+param_type,param_value,wis_value,clinician_value,ess
+alpha_smoothing,0.01,88.8,78.9,1.26
+alpha_smoothing,0.05,86.7,78.9,2.12
+alpha_smoothing,0.1,85.33,78.9,3.28
+alpha_smoothing,0.2,84.09,78.9,5.47
+weight_clip,100.0,86.7,78.9,2.12
+weight_clip,250.0,86.7,78.9,2.12
+weight_clip,500.0,86.7,78.9,2.12
+weight_clip,1000.0,86.7,78.9,2.12

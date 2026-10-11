@@ -1,0 +1,21 @@
+{
+  "cohort_version": "1.4",
+  "consensus_definition": "Sepsis-3 (Singer et al., 2016)",
+  "inclusion": [
+    "Age >= 18 at ICU admission",
+    "Suspected infection (blood culture and antibiotics)",
+    "Acute organ dysfunction (SOFA >= 2)"
+  ],
+  "exclusion": [
+    "Withdrawal of life support / futile care",
+    "Missing fluid administration documentation",
+    "ICU stay duration < 24 hours"
+  ],
+  "time_series_resolution": "4-hour intervals up to 72 hours around sepsis onset",
+  "counts": {
+    "total_patients": 600,
+    "train_patients": 420,
+    "val_patients": 90,
+    "test_patients": 90
+  }
+}

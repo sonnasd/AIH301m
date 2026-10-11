@@ -1,0 +1,41 @@
+{
+  "raw_features_count": 30,
+  "scaled_features": [
+    "age_scaled",
+    "gender_scaled",
+    "elixhauser_scaled",
+    "sofa_initial_scaled",
+    "gcs_scaled",
+    "hr_scaled",
+    "sys_bp_scaled",
+    "dia_bp_scaled",
+    "map_scaled",
+    "rr_scaled",
+    "temp_scaled",
+    "spo2_scaled",
+    "fio2_scaled",
+    "lactate_scaled",
+    "creatinine_scaled",
+    "platelets_scaled",
+    "bilirubin_scaled",
+    "wbc_scaled",
+    "bun_scaled",
+    "glucose_scaled",
+    "potassium_scaled",
+    "sodium_scaled",
+    "chloride_scaled",
+    "bicarbonate_scaled",
+    "ph_scaled",
+    "pao2_scaled",
+    "paco2_scaled",
+    "hemoglobin_scaled",
+    "urine_output_scaled",
+    "cumulated_balance_scaled"
+  ],
+  "state_clusters": 75,
+  "action_dimensions": {
+    "iv_fluids_levels": 5,
+    "vasopressors_levels": 5,
+    "total_actions": 25
+  }
+}

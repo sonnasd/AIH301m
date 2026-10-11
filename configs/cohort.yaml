@@ -1,0 +1,44 @@
+dataset_name: "MIMIC-III Sepsis-3 Cohort"
+version: "1.4"
+n_patients: 600
+time_step_hours: 4
+max_window_hours: 72
+train_ratio: 0.70
+val_ratio: 0.15
+test_ratio: 0.15
+random_state: 42
+min_age: 18
+sepsis_criteria: "Sepsis-3 (Suspected Infection + SOFA >= 2)"
+imputation_strategy: "median"
+scaling_strategy: "standard_scaler"
+features:
+  - age
+  - gender
+  - elixhauser
+  - sofa_initial
+  - gcs
+  - hr
+  - sys_bp
+  - dia_bp
+  - map
+  - rr
+  - temp
+  - spo2
+  - fio2
+  - lactate
+  - creatinine
+  - platelets
+  - bilirubin
+  - wbc
+  - bun
+  - glucose
+  - potassium
+  - sodium
+  - chloride
+  - bicarbonate
+  - ph
+  - pao2
+  - paco2
+  - hemoglobin
+  - urine_output
+  - cumulated_balance

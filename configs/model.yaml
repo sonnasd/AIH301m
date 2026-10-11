@@ -1,0 +1,16 @@
+model_name: "Tabular Model-Based Offline RL"
+algorithm: "Policy Iteration"
+n_clusters: 75
+random_state: 42
+gamma: 0.99
+theta: 1.0e-5
+max_eval_iters: 1000
+max_pi_iters: 100
+min_transition_count: 5
+reward_alive: 100.0
+reward_dead: -100.0
+reward_step: 0.0
+action_space:
+  n_actions: 25
+  fluid_bins: 5
+  vaso_bins: 5
