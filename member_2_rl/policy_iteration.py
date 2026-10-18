@@ -2,6 +2,10 @@ import numpy as np
 
 class PolicyIteration:
     def __init__(self, mdp, gamma=0.99, theta=1e-5, max_eval_iters=1000, max_pi_iters=100):
+        if not 0 <= gamma < 1 or not np.isfinite(theta) or theta <= 0 or min(max_eval_iters, max_pi_iters) < 1:
+            raise ValueError("Invalid policy iteration parameters")
+        if not mdp.valid_action_mask[:mdp.n_states].any(axis=1).all():
+            raise ValueError("Every state must have an allowed action")
         self.mdp = mdp
         self.gamma = gamma
         self.theta = theta
@@ -40,7 +44,8 @@ class PolicyIteration:
             self.V[self.dead_state] = 0.0
             
             if delta < self.theta:
-                break
+                return
+        raise RuntimeError("Policy evaluation did not converge within max_eval_iters")
                 
     def improve_policy(self):
         policy_stable = True
@@ -76,6 +81,8 @@ class PolicyIteration:
         return Q
         
     def fit(self):
+        self.history = []
+        self.converged = False
         for it in range(self.max_pi_iters):
             self.evaluate_policy()
             stable, changed = self.improve_policy()
@@ -89,7 +96,9 @@ class PolicyIteration:
             })
             
             if stable:
+                self.converged = True
                 break
-                
+        if not self.converged:
+            raise RuntimeError("Policy iteration did not converge within max_pi_iters")
         self.evaluate_policy()
         return self

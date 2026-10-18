@@ -1,24 +1,37 @@
 import os
-import sys
 import numpy as np
 import pandas as pd
 
-base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if base_dir not in sys.path:
-    sys.path.insert(0, base_dir)
-
-def run_data_quality_audit(input_csv="data/raw_sepsis_cohort.csv", report_md="docs/data_quality_report.md"):
-    os.makedirs(os.path.dirname(report_md), exist_ok=True)
+def run_data_quality_audit(input_csv="data/raw_sepsis_cohort.csv", report_md="docs/data_quality_report.md", splits=None, data_source="unspecified"):
+    os.makedirs(os.path.dirname(os.path.abspath(report_md)), exist_ok=True)
     
     if not os.path.exists(input_csv):
         raise FileNotFoundError(f"{input_csv} does not exist")
         
     df = pd.read_csv(input_csv)
+    if df.empty:
+        raise ValueError("Cannot audit an empty cohort")
+    episode_cols = ['subject_id'] + [c for c in ['hadm_id', 'icustay_id'] if c in df]
+    temporal_ok = not df[episode_cols].isna().any().any()
+    outcomes_ok = df['died'].isin([0, 1]).all()
+    for _, group in df.groupby(episode_cols, sort=False):
+        steps = group['step'].to_numpy(dtype=float)
+        temporal_ok &= bool(np.isfinite(steps).all() and (steps >= 0).all() and (steps % 1 == 0).all() and (np.diff(steps) == 1).all())
+        outcomes_ok &= group['died'].nunique(dropna=False) == 1
+    split_status = 'Not checked: split data not supplied'
+    if splits is not None:
+        ids = [set(part['subject_id']) for part in splits]
+        split_ok = (
+            len(ids) == 3 and all(ids) and
+            all(not left.intersection(right) for i, left in enumerate(ids) for right in ids[i + 1:]) and
+            set.union(*ids) == set(df['subject_id'])
+        )
+        split_status = 'PASS' if split_ok else 'FAIL'
     
     total_records = len(df)
     n_patients = df['subject_id'].nunique()
     
-    feature_cols = [c for c in df.columns if c not in ['subject_id', 'icustay_id', 'step', 'died']]
+    feature_cols = [c for c in df.select_dtypes(include='number').columns if c not in ['subject_id', 'hadm_id', 'icustay_id', 'step', 'died']]
     
     missing_summary = []
     for c in feature_cols:
@@ -59,8 +72,9 @@ def run_data_quality_audit(input_csv="data/raw_sepsis_cohort.csv", report_md="do
         "",
         "## 1. Cohort Overview",
         f"- Total ICU Observations: {total_records}",
-        f"- Unique Sepsis Patients: {n_patients}",
-        f"- Average Steps per Patient: {total_records / n_patients:.1f} (4-hour bins, up to 72h observation window)",
+        f"- Unique patients: {n_patients}",
+        f"- Source: {data_source}. This audit does not verify Sepsis-3 eligibility.",
+        f"- Average Steps per Patient: {total_records / n_patients:.1f}",
         f"- Crude Mortality Rate: {df.groupby('subject_id')['died'].first().mean() * 100:.2f}%",
         "",
         "## 2. Feature Distribution and Missingness Summary",
@@ -68,10 +82,10 @@ def run_data_quality_audit(input_csv="data/raw_sepsis_cohort.csv", report_md="do
         table_str,
         "",
         "## 3. Data Leakage and Integrity Verification",
-        "- Temporal ordering: Verified monotonically increasing step index per trajectory.",
-        "- Subject independence: Train/Val/Test splitting strictly enforced at subject_id level.",
-        "- Imputation & Scaling: Standard deviations and medians fitted exclusively on training cohort.",
-        "- State encoding: Centroids fitted on training observations only."
+        f"- Temporal ordering and contiguous steps: {'PASS' if temporal_ok else 'FAIL'}",
+        f"- Consistent binary outcome per episode: {'PASS' if outcomes_ok else 'FAIL'}",
+        f"- Patient-disjoint splits covering raw cohort: {split_status}",
+        "- Model fit provenance is not verifiable from raw CSV; inspect pipeline fit calls and regression tests."
     ]
     
     with open(report_md, 'w', encoding='utf-8') as f:

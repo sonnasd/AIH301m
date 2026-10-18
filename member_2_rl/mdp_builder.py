@@ -1,7 +1,10 @@
 import numpy as np
+from member_1_data.trajectory_validation import validate_trajectories
 
 class MDPBuilder:
     def __init__(self, n_states=75, n_actions=25, min_action_count=5):
+        if min(n_states, n_actions, min_action_count) < 1:
+            raise ValueError("State, action and support counts must be positive")
         self.n_states = n_states
         self.n_actions = n_actions
         self.min_action_count = min_action_count
@@ -16,6 +19,13 @@ class MDPBuilder:
         self.valid_action_mask = np.zeros((self.total_states, self.n_actions), dtype=bool)
         
     def build_from_trajectories(self, train_traj_df):
+        validate_trajectories(train_traj_df, self.n_states, self.n_actions)
+        self.counts.fill(0)
+        self.transitions.fill(0)
+        self.rewards.fill(0)
+        self.valid_action_mask.fill(False)
+        self.fallback_states = []
+        self.unobserved_states = []
         for _, row in train_traj_df.iterrows():
             s = int(row['state'])
             a = int(row['action'])
@@ -24,7 +34,9 @@ class MDPBuilder:
             
             if 0 <= s < self.total_states and 0 <= a < self.n_actions and 0 <= s_next < self.total_states:
                 self.counts[s, a, s_next] += 1.0
-                self.rewards[s, a, s_next] = r
+                self.rewards[s, a, s_next] += r
+
+        np.divide(self.rewards, self.counts, out=self.rewards, where=self.counts > 0)
                 
         for s in range(self.n_states):
             sa_counts = self.counts[s].sum(axis=1)
@@ -36,9 +48,11 @@ class MDPBuilder:
             if not np.any(self.valid_action_mask[s]):
                 best_a = int(np.argmax(sa_counts))
                 if sa_counts[best_a] > 0:
+                    self.fallback_states.append(s)
                     self.valid_action_mask[s, best_a] = True
                     self.transitions[s, best_a] = self.counts[s, best_a] / sa_counts[best_a]
                 else:
+                    self.unobserved_states.append(s)
                     self.valid_action_mask[s, 0] = True
                     self.transitions[s, 0, s] = 1.0
                     

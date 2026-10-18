@@ -2,6 +2,10 @@ import numpy as np
 import pandas as pd
 
 def generate_sepsis_cohort(n_patients=600, max_steps=18, random_state=42):
+    if not isinstance(n_patients, int) or n_patients < 1:
+        raise ValueError("n_patients must be a positive integer")
+    if not isinstance(max_steps, int) or max_steps < 8:
+        raise ValueError("max_steps must be an integer >= 8")
     rng = np.random.RandomState(random_state)
     records = []
     
@@ -88,13 +92,6 @@ def generate_sepsis_cohort(n_patients=600, max_steps=18, random_state=42):
             else:
                 vaso = float(np.clip(rng.exponential(0.18) + 0.02, 0.01, 1.8))
                 
-            if iv_fluids > 0:
-                map_val += rng.uniform(1.0, 4.0)
-            if vaso > 0:
-                map_val += rng.uniform(3.0, 8.0)
-                
-            cum_balance += iv_fluids - urine
-            
             row = {
                 'subject_id': subject_id,
                 'hadm_id': hadm_id,
@@ -134,13 +131,22 @@ def generate_sepsis_cohort(n_patients=600, max_steps=18, random_state=42):
                 'vasopressors': vaso
             }
             patient_trajectory.append(row)
+            pressure_gain = 0.0
+            if iv_fluids > 0:
+                pressure_gain += rng.uniform(1.0, 4.0)
+            if vaso > 0:
+                pressure_gain += rng.uniform(3.0, 8.0)
+            sys_bp = float(np.clip(sys_bp + pressure_gain, 55, 190))
+            dia_bp = float(np.clip(dia_bp + pressure_gain, 30, 110))
+            map_val = (sys_bp + 2 * dia_bp) / 3.0
+            cum_balance += iv_fluids - urine
             
         final_state = patient_trajectory[-1]
         mortality_logit = (
             -3.4
             + 0.03 * (final_state['age'] - 65)
             + 0.28 * (final_state['lactate'] - 2.0)
-            - 0.05 * (final_state['map'] - 65)
+            - 0.05 * (map_val - 65)
             + 0.16 * (final_state['sofa_initial'] - 6)
             + 0.10 * (final_state['creatinine'] - 1.2)
         )

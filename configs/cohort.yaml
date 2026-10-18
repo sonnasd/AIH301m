@@ -1,5 +1,5 @@
-dataset_name: "MIMIC-III Sepsis-3 Cohort"
-version: "1.4"
+dataset_name: "Synthetic sepsis coursework demo"
+version: "synthetic-v2"
 n_patients: 600
 time_step_hours: 4
 max_window_hours: 72
@@ -8,7 +8,7 @@ val_ratio: 0.15
 test_ratio: 0.15
 random_state: 42
 min_age: 18
-sepsis_criteria: "Sepsis-3 (Suspected Infection + SOFA >= 2)"
+sepsis_criteria: "Not clinically validated; simulated adult ICU-like observations"
 imputation_strategy: "median"
 scaling_strategy: "standard_scaler"
 features:

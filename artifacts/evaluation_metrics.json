@@ -1,0 +1,21 @@
+{
+  "point_wis": 91.48082548816491,
+  "point_clinician": 80.72883139662191,
+  "ess": 1.8960554429945284,
+  "n_patients": 90,
+  "n_episodes": 90,
+  "low_ess": true,
+  "clipped_episodes": 0,
+  "invalid_bootstraps": 0,
+  "confidence_level": 0.95,
+  "wis_median": 91.4811774981156,
+  "wis_ci_lower": 88.63748761423216,
+  "wis_ci_upper": 93.20640716854692,
+  "clin_median": 80.76748154664145,
+  "clin_ci_lower": 72.7050116114788,
+  "clin_ci_upper": 86.94619380383791,
+  "data_source": "synthetic",
+  "estimand": "episode return; patient-cluster bootstrap",
+  "clinical_efficacy_established": false,
+  "sensitivity_split": "validation"
+}

@@ -1,127 +1,84 @@
-# AI Clinician: Optimal Treatment Strategies for Sepsis in Intensive Care
+# AI Clinician: synthetic offline RL coursework demo
 
-This project implements an end-to-end Model-based Offline Reinforcement Learning system inspired by Komorowski et al. (*Nature Medicine*, 2018) for learning individualized fluid and vasopressor strategies for sepsis patients in the ICU. The codebase is organized into three distinct, modular components designed for a three-member collaboration, complete with runnable pipelines, unit tests, and interactive Jupyter Notebooks.
+Runnable AIH301m Assignment 2 demonstration inspired by Komorowski et al. (2018).
+This is a simplified implementation, not a reproduction of the paper's clinical results.
 
----
+## Run
 
-## 1. Project Architecture and 3-Member Responsibilities
+Use Python 3.10+ from the project root:
 
-The codebase is split into three standalone folders representing each member's core engineering module:
+In the reviewed environment, all three notebooks ran through a real Jupyter kernel.
+The browser notebook frontend was not installed because the package index timed out;
+install the declared dependencies before using the browser launch commands below.
 
-```
-ass2/
-|-- member_1_data/
-|   |-- download_mimic_demo.py        # Automated fetcher for PhysioNet MIMIC-III demo tables
-|   |-- query_cohort.sql             # SQL definitions for Sepsis-3 criteria (Seymour et al.)
-|   |-- extract_mimic.py             # ETL pipeline extracting sepsis cohort and time series
-|   |-- synthetic_data.py            # High-volume EHR simulator for full pipeline execution
-|   |-- preprocessor.py              # Zero-leakage patient-level splitter, imputer, scaler
-|   |-- state_action_encoder.py      # K-means++ clustering (states) and 5x5 action discretization
-|   |-- data_quality.py              # Automated data audit, missingness and outlier checks
-|   `-- member_1_data_pipeline.ipynb # Interactive notebook for Member 1
-|
-|-- member_2_rl/
-|   |-- mdp_builder.py               # Transition probability estimation and valid action masking
-|   |-- policy_iteration.py          # Tabular Policy Iteration (Bellman expectation solver)
-|   |-- rl_trainer.py                # Training orchestrator and artifact serializer
-|   `-- member_2_mdp_policy_iteration.ipynb # Interactive notebook for Member 2
-|
-|-- member_3_evaluation/
-|   |-- behavior_policy.py           # Empirical clinician policy estimator with Laplace smoothing
-|   |-- off_policy_wis.py            # Trajectory-wise Weighted Importance Sampling (WIS) and ESS
-|   |-- bootstrap_evaluator.py       # Patient-level bootstrap resampling (95% Confidence Intervals)
-|   |-- visualizer.py                # Scientific plotting (dose distributions, policy values, mortality)
-|   `-- member_3_ope_evaluation.ipynb # Interactive notebook for Member 3
-|
-|-- data/                            # Processed trajectories and data dictionary
-|-- artifacts/                       # Serialized scalers, encoders, and trained policies
-|-- figures/                         # High-resolution evaluation charts
-|-- tests/                           # Unit tests for all three modules
-|-- docs/                            # Data quality reports and methodological documentation
-|-- main_pipeline.py                 # Unified end-to-end execution runner
-|-- run_tests.py                     # Automated unit test discovery and runner
-`-- requirements.txt                 # Project environment dependencies
+```powershell
+python -m pip install -r requirements.txt
+python -B -m unittest test_regressions -v
+python main_pipeline.py --output-dir demo_output
 ```
 
----
+The first run writes to a new directory. To replace existing generated data, explicitly add
+`--overwrite`. To regenerate the bundled root outputs, use
+`python main_pipeline.py --output-dir . --overwrite`.
+The pipeline generates synthetic data only; it never silently substitutes synthetic data for MIMIC.
 
-## 2. Technical Methodology
+Interactive presentation (open from the project root; run notebooks in order):
 
-### Module 1: Data Preprocessing and State-Action Space (Member 1)
-- **Cohort Criteria**: Adult ICU patients (age >= 18) satisfying Sepsis-3 consensus (suspected infection within -24h to +72h window and SOFA score >= 2).
-- **Time Window**: Discretized into 4-hour intervals covering up to 72 hours of admission.
-- **Leakage Prevention**: Patient-level splitting (Train 70%, Val 15%, Test 15%). Scalers, imputers, and cluster centroids are fitted exclusively on training trajectories.
-- **State Space**: 75 physiological clusters generated via K-means++ clustering on 15 vital signs and laboratory biomarkers, plus 2 terminal absorbing states (State 75: Alive, State 76: Dead).
-- **Action Space**: 25 discrete actions (5 fluid dose levels x 5 vasopressor dose levels). Dose 0 indicates no medication, while non-zero doses are partitioned into 4 empirical quartiles on training observations.
-
-### Module 2: Markov Decision Process and Policy Iteration (Member 2)
-- **Transition Probabilities**: Calculated from empirical transition counts:
-  `T(s, a, s') = N(s, a, s') / N(s, a)`
-- **Safety Masking**: Actions observed fewer than `min_action_count` times in a given state are masked out to prevent ungrounded extrapolation.
-- **Reward Structure**: `Reward = 0.0` at intermediate steps; `Reward = +100.0` upon transition into the alive state; `Reward = -100.0` upon transition into the dead state.
-- **Policy Iteration**:
-  1. *Policy Evaluation*: Iterative Bellman updates until maximum value change is below threshold `theta = 1e-5`:
-     `V(s) = sum_{s'} T(s, pi(s), s') [ R(s, pi(s), s') + gamma * V(s') ]`
-  2. *Policy Improvement*: Greedy action selection across supported action mask:
-     `pi_new(s) = argmax_{a in A_valid(s)} sum_{s'} T(s, a, s') [ R(s, a, s') + gamma * V(s') ]`
-  Converges to the optimal policy `pi*` within the empirical MDP.
-
-### Module 3: Off-Policy Evaluation and Statistical Uncertainty (Member 3)
-- **Clinician Behavior Policy**: Estimated from empirical action frequencies with Laplace smoothing floor to guarantee `pi_b(a|s) > 0`.
-- **Soft Target Policy**: The deterministic AI policy is softened (`pi_e = 0.99` for the chosen action, remaining `0.01` distributed uniformly across other actions).
-- **Weighted Importance Sampling (WIS)**:
-  `rho_i = prod_t [ pi_e(a_{i,t} | s_{i,t}) / pi_b(a_{i,t} | s_{i,t}) ]`
-  `V_WIS = sum_i (rho_i * G_i) / sum_i rho_i`
-- **Effective Sample Size (ESS)**: Monitors importance weight degeneration:
-  `ESS = (sum_i rho_i)^2 / sum_i (rho_i^2)`
-- **Patient-Level Bootstrapping**: Resamples entire patient trajectories (500 iterations) to derive non-parametric 95% confidence intervals `[2.5%, 97.5%]`.
-
----
-
-## 3. How to Run
-
-### Step 1: Install Dependencies
-```bash
-pip install -r requirements.txt
+```powershell
+python -m notebook member_1_data/member_1_data_pipeline.ipynb
+python -m notebook member_2_rl/member_2_mdp_policy_iteration.ipynb
+python -m notebook member_3_evaluation/member_3_ope_evaluation.ipynb
 ```
 
-### Step 2: Run Unit Tests
-```bash
-python run_tests.py
-```
+Notebooks use root outputs by default and call the same stage functions as the CLI.
+Set `$env:ASS2_OUTPUT_DIR = "$PWD/demo_output"` before launching to use another run.
+Member 1 reuses data only when its saved configuration matches; it will not overwrite a different run.
+Only load joblib artifacts generated by a trusted local run.
 
-### Step 3: Run End-to-End Pipeline
-```bash
-python main_pipeline.py
-```
-This executes the full sequence:
-1. Generates/loads Sepsis-3 patient cohort.
-2. Fits preprocessing and state-action encoders.
-3. Builds the MDP and solves for optimal policy via Policy Iteration.
-4. Performs WIS Off-Policy Evaluation and Bootstrap uncertainty analysis on held-out test data.
-5. Saves all publication figures into `figures/`.
+## Three-member ownership
 
-### Step 4: Interactive Notebooks
-Each member can launch and present their individual notebook:
-- Member 1: `jupyter notebook member_1_data/member_1_data_pipeline.ipynb`
-- Member 2: `jupyter notebook member_2_rl/member_2_mdp_policy_iteration.ipynb`
-- Member 3: `jupyter notebook member_3_evaluation/member_3_ope_evaluation.ipynb`
+- Member 1: simulated observations, patient splits, imputation/scaling, K-means states, dose bins and episode construction.
+- Member 2: empirical MDP, support masking, policy iteration and batch empirical-policy TD(0).
+- Member 3: behavior probabilities, WIS, patient-cluster bootstrap, validation sensitivity and diagnostic figures.
 
----
+The three YAML files under `configs/` drive the pipeline. A snapshot is saved in
+`artifacts/run_config.json`; subsequent stages reject a conflicting configuration.
+There is one predeclared policy, not a search across hundreds of candidate models.
+Validation is used for diagnostics/sensitivity, not test-set tuning.
 
-## 4. Assessment Rubric Mapping
+## Model and evaluation
 
-| Criterion | Code Deliverable | Slide Ownership |
-|---|---|---|
-| **P4** (Sepsis context & AI solution) | `synthetic_data.py`, `query_cohort.sql` | Member 1 (Slides 01-03) |
-| **M4** (Feature engineering, biostatistics, data quality) | `preprocessor.py`, `data_quality.py`, `state_action_encoder.py` | Member 1 (Slides 04-06) |
-| **P5** (MDP formulation & Reinforcement Learning agent) | `mdp_builder.py`, `policy_iteration.py`, `rl_trainer.py` | Member 2 (Slides 07-12) |
-| **M5** (OPE evaluation, WIS, bootstrap confidence intervals) | `behavior_policy.py`, `off_policy_wis.py`, `bootstrap_evaluator.py`, `visualizer.py` | Member 3 (Slides 13-16) |
-| **D2** (Critical synthesis: ML vs biostatistics, causal limits) | `data_dictionary.md`, `main_pipeline.py`, comparative figures | All Members (Slides 16-18) |
+- 600 simulated adults, 30 input features, simulated four-hour steps, maximum 72 hours.
+- 70/15/15 split by patient. All stays of a patient remain together; each ICU stay is a separate episode.
+- Training-only medians, scaler, K-means and positive-dose quartiles.
+- 75 health clusters plus two terminal states; 25 actions = five fluid bins x five vasopressor bins.
+- Observations precede the current action. Treatment effects and cumulative fluid balance enter the next observation.
+- Intermediate reward 0; simulated terminal outcome +100/-100; gamma 0.99. Outcome is not a measured 90-day endpoint.
+- MDP actions require five observations where possible. States without sufficient support retain their most frequent action and are exported as explicit below-threshold fallbacks. Unobserved states have labelled placeholder self-loops, not clinically safe recommendations.
+- TD averages observed state-action targets to convergence and weights Q by empirical behavior frequencies.
+- Trajectory WIS uses stable log-weight normalization and optional upper clipping of absolute trajectory weights. Target probability is 0.99 for the chosen action; remaining mass is spread across 24 alternatives.
+- A low-ESS warning is triggered below max(10, 10% of episode count); this is a diagnostic heuristic, not a statistical guarantee.
+- The observed baseline is mean discounted episode return. The target estimate uses episode WIS.
+- Bootstrap resamples patients, retaining all their episodes; 500 percentile replicates, 95% CI. Unsupported replicates are counted, not replaced by zero.
+- Sensitivity varies smoothing, clipping and target softness on validation data.
 
----
+## Outputs and presentation limits
 
-## 5. Academic Integrity and Clinical Disclaimers
-1. **Observational EHR Data**: Retrospective observational data contains unmeasured confounding (e.g. physician clinical intuition, unrecorded vitals). High estimated policy return does not guarantee causal efficacy in actual patients.
-2. **Policy Return Interpretation**: The reported policy value (e.g. 84.5 in Komorowski et al. or 93.0 in this model) represents the expected cumulative discounted return, not a survival percentage.
-3. **Clinical Governance**: This software is built for educational and research purposes under the AIH301m assignment brief. It cannot be used for clinical decision support or medical prescription.
+`artifacts/evaluation_metrics.json` is the machine-readable result, including ESS, source,
+clipping and bootstrap diagnostics. Figures show synthetic results and sparse mortality-bin
+counts/intervals. `docs/data_quality_report.md` reports only checks it actually performed.
+
+The default run has very low test ESS (approximately 1.90/90 episodes). A narrow bootstrap
+interval does not repair this lack of overlap. Do not claim the AI outperforms clinicians,
+reduces mortality, or is clinically validated. Reward is not a survival percentage.
+The behavior distribution and outcomes are simulated; behavior smoothing does not establish
+true overlap or remove confounding. HCOPE guarantees and prospective validation are not implemented.
+
+The downloaded public MIMIC demo tables are not used to train this synthetic pipeline.
+`extract_mimic.py` raises an explicit unsupported-extraction error instead of inventing records.
+`query_cohort.sql` is only a PostgreSQL suspected-infection candidate query: limited antibiotic
+list, available culture timestamps, no acute SOFA increase calculation, and no complete
+clinical time-series ETL. It is not a validated Sepsis-3 cohort query and has not been
+executed against a PostgreSQL MIMIC database here.
+
+This is educational software, not medical advice or a prescribing system.

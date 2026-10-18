@@ -18,6 +18,9 @@ class StateActionEncoder:
         self.is_fitted = False
         
     def fit(self, train_df, feature_cols):
+        doses = train_df[['iv_fluids', 'vasopressors']].to_numpy(dtype=float)
+        if not np.isfinite(doses).all() or (doses < 0).any():
+            raise ValueError("Treatment doses must be finite and nonnegative")
         self.feature_cols = feature_cols
         X = train_df[self.feature_cols].values
         self.kmeans.fit(X)
@@ -29,7 +32,7 @@ class StateActionEncoder:
             f_q75 = float(np.percentile(pos_fluids, 75))
             self.fluid_bins = [0.0, f_q25, f_q50, f_q75]
         else:
-            self.fluid_bins = [0.0, 100.0, 250.0, 500.0]
+            self.fluid_bins = [0.0, 0.0, 0.0, 0.0]
             
         pos_vaso = train_df.loc[train_df['vasopressors'] > 0, 'vasopressors'].values
         if len(pos_vaso) > 0:
@@ -38,12 +41,16 @@ class StateActionEncoder:
             v_q75 = float(np.percentile(pos_vaso, 75))
             self.vaso_bins = [0.0, v_q25, v_q50, v_q75]
         else:
-            self.vaso_bins = [0.0, 0.05, 0.15, 0.35]
+            self.vaso_bins = [0.0, 0.0, 0.0, 0.0]
             
         self.is_fitted = True
         return self
         
     def discretize_action(self, fluid_val, vaso_val):
+        if not self.is_fitted:
+            raise RuntimeError("Encoder must be fitted before discretizing actions")
+        if not np.isfinite([fluid_val, vaso_val]).all() or min(fluid_val, vaso_val) < 0:
+            raise ValueError("Treatment doses must be finite and nonnegative")
         if fluid_val <= 0.0:
             f_bin = 0
         elif fluid_val <= self.fluid_bins[1]:
@@ -80,6 +87,11 @@ class StateActionEncoder:
             raise RuntimeError("Encoder must be fitted before building trajectories")
             
         df = df.copy()
+        required = ['subject_id', 'icustay_id', 'step', 'died'] + (['hadm_id'] if 'hadm_id' in df else [])
+        if df.empty or df[required].isna().any().any():
+            raise ValueError("Episode identifiers, steps and outcomes are required")
+        if not df['died'].isin([0, 1]).all():
+            raise ValueError("Outcomes must be binary")
         df['state'] = self.transform_states(df)
         
         actions = []
@@ -96,10 +108,17 @@ class StateActionEncoder:
         df['vaso_bin'] = vaso_bins
         
         trajectories = []
-        grouped = df.groupby('subject_id', sort=False)
+        episode_cols = ['subject_id'] + [c for c in ['hadm_id', 'icustay_id'] if c in df]
+        grouped = df.groupby(episode_cols, sort=False)
         
-        for subject_id, group in grouped:
+        for _, group in grouped:
+            subject_id = group['subject_id'].iloc[0]
             group = group.sort_values('step').reset_index(drop=True)
+            steps = group['step'].to_numpy(dtype=float)
+            if not np.isfinite(steps).all() or (steps < 0).any() or (steps % 1 != 0).any() or (np.diff(steps) != 1).any():
+                raise ValueError("Episode steps must be unique contiguous nonnegative integers")
+            if group['died'].nunique() != 1:
+                raise ValueError("Outcome must be constant within an ICU stay")
             n_rows = len(group)
             died = int(group['died'].iloc[0])
             hadm_id = int(group['hadm_id'].iloc[0]) if 'hadm_id' in group.columns else 150000 + int(subject_id)
@@ -157,21 +176,15 @@ class StateActionEncoder:
         with open(filepath, 'w') as f:
             json.dump(info, f, indent=2)
             
-    def export_manifest(self, filepath, n_patients_total, n_train, n_val, n_test):
+    def export_manifest(self, filepath, n_patients_total, n_train, n_val, n_test, generation=None):
         manifest = {
-            'cohort_version': '1.4',
-            'consensus_definition': 'Sepsis-3 (Singer et al., 2016)',
-            'inclusion': [
-                'Age >= 18 at ICU admission',
-                'Suspected infection (blood culture and antibiotics)',
-                'Acute organ dysfunction (SOFA >= 2)'
-            ],
-            'exclusion': [
-                'Withdrawal of life support / futile care',
-                'Missing fluid administration documentation',
-                'ICU stay duration < 24 hours'
-            ],
-            'time_series_resolution': '4-hour intervals up to 72 hours around sepsis onset',
+            'cohort_version': 'synthetic-v2',
+            'data_source': 'synthetic',
+            'clinical_validation': False,
+            'generation_parameters': generation,
+            'cohort_definition': 'Simulated adults; not an extracted Sepsis-3 cohort',
+            'state_timing': 'Before current treatment; effects enter next state',
+            'time_series_resolution': 'Simulated 4-hour steps, not measured sepsis onset',
             'counts': {
                 'total_patients': n_patients_total,
                 'train_patients': n_train,
