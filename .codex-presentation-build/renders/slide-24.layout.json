@@ -1,0 +1,9 @@
+{"schema":"openai.presentation.layout/v5","unit":"px","slide":{"id":"sl/0enehc","index":23,"layout":{"id":"ly/gvm50f21","name":"Blank"},"backgroundColor":"rgba(255,255,255,1)","position":{"left":0,"top":0,"width":1280,"height":720}},
+"elements":[
+{"id":"sh/nu9cnep4","kind":"textbox","name":"text-1","position":{"left":64,"top":44,"width":1152,"height":90},"text":"Kết quả trên 90 episode test mô phỏng","style":{"fontSize":45.33,"typeface":"Arial","color":"#263238","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/ovitgj6p","kind":"textbox","name":"text-2","position":{"left":64,"top":660,"width":1050,"height":42},"text":"Mô phỏng: artifacts/evaluation_metrics.json, 500 patient-cluster bootstrap, percentile 95%","style":{"fontSize":16,"typeface":"Arial","color":"#58656A","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/pwrupo7a","kind":"textbox","name":"text-3","position":{"left":1160,"top":662,"width":56,"height":24},"text":"24","style":{"fontSize":16,"typeface":"Arial","color":"#58656A","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"tb/7a1wbu1s","kind":"table","position":{"left":64,"top":183,"width":1152,"height":252},"text":"Ước lượng return\tToàn test\tTrung vị\nbootstrap\tKTC 95%\nbootstrap\nChính sách đích mềm (WIS)\t91,48\t91,48\t88,64–93,21\nHành vi mô phỏng quan sát\t80,73\t80,77\t72,71–86,95","rows":3,"cols":4},
+{"id":"sh/by9crep0","kind":"textbox","name":"text-4","position":{"left":64,"top":480,"width":1140,"height":60},"text":"ESS = 1,90 / 90: so sánh thiếu độ tin cậy","style":{"fontSize":36,"typeface":"Arial","color":"#8C2835","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/czitkj6l","kind":"textbox","name":"text-5","position":{"left":64,"top":571,"width":1140,"height":65},"text":"Chỉ minh họa kỹ thuật. Return không phải tỷ lệ sống.","style":{"fontSize":30.67,"typeface":"Arial","color":"#8C2835","alignment":"left"},"geometry":"rect","lineWidth":0}
+]}

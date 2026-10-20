@@ -1,0 +1,10 @@
+{"schema":"openai.presentation.layout/v5","unit":"px","slide":{"id":"sl/8btz6m","index":13,"layout":{"id":"ly/gvm50f21","name":"Blank"},"backgroundColor":"rgba(255,255,255,1)","position":{"left":0,"top":0,"width":1280,"height":720}},
+"elements":[
+{"id":"sh/hgvq5sje","kind":"textbox","name":"text-1","position":{"left":64,"top":44,"width":1152,"height":90},"text":"Bellman policy evaluation","style":{"fontSize":45.33,"typeface":"Arial","color":"#263238","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/udkradkn","kind":"textbox","name":"text-2","position":{"left":64,"top":660,"width":1050,"height":42},"text":"member_2_rl/policy_iteration.py: evaluate_policy()","style":{"fontSize":16,"typeface":"Arial","color":"#58656A","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/vet83i18","kind":"textbox","name":"text-3","position":{"left":1160,"top":662,"width":56,"height":24},"text":"14","style":{"fontSize":16,"typeface":"Arial","color":"#58656A","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/8b298n2h","kind":"textbox","name":"text-4","position":{"left":64,"top":176,"width":1150,"height":65},"text":"V_mới(s) = Σₛ′ T(s, π(s), s′)","style":{"fontSize":36,"typeface":"Arial","color":"#087F83","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/9cbq1sj2","kind":"textbox","name":"text-5","position":{"left":64,"top":244,"width":1150,"height":70},"text":"                  × [R(s, π(s), s′) + γV(s′)]","style":{"fontSize":36,"typeface":"Arial","color":"#087F83","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"tb/j2twj2xw","kind":"table","position":{"left":64,"top":355,"width":1152,"height":220},"text":"Ký hiệu\tÝ nghĩa\nπ(s)\tHành động hiện tại của chính sách tại s\nT và R\tXác suất chuyển và reward từ train\nγV(s′)\tGiá trị tương lai sau chiết khấu","rows":4,"cols":2},
+{"id":"sh/7at8zi1w","kind":"textbox","name":"text-6","position":{"left":64,"top":600,"width":1150,"height":47},"text":"Lặp đến khi Δ = maxₛ |V_mới(s) − V_cũ(s)| < 10⁻⁵","style":{"fontSize":29.33,"typeface":"Arial","color":"#263238","alignment":"left"},"geometry":"rect","lineWidth":0}
+]}

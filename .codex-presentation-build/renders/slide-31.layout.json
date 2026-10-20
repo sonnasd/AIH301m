@@ -1,0 +1,8 @@
+{"schema":"openai.presentation.layout/v5","unit":"px","slide":{"id":"sl/n76y3h","index":30,"layout":{"id":"ly/gvm50f21","name":"Blank"},"backgroundColor":"rgba(255,255,255,1)","position":{"left":0,"top":0,"width":1280,"height":720}},
+"elements":[
+{"id":"sh/po3upwny","kind":"textbox","name":"text-1","position":{"left":64,"top":44,"width":1152,"height":90},"text":"Phụ lục C: kiểm thử và hợp đồng dữ liệu","style":{"fontSize":45.33,"typeface":"Arial","color":"#263238","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/2lsbu147","kind":"textbox","name":"text-2","position":{"left":64,"top":660,"width":1050,"height":42},"text":"member_1_data/trajectory_validation.py, test_regressions.py","style":{"fontSize":16,"typeface":"Arial","color":"#58656A","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/3mlsnm5s","kind":"textbox","name":"text-3","position":{"left":1160,"top":662,"width":56,"height":24},"text":"31","style":{"fontSize":16,"typeface":"Arial","color":"#58656A","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"tb/x03elk7a","kind":"table","position":{"left":64,"top":162,"width":1152,"height":372},"text":"Lớp kiểm tra\tRàng buộc cần giữ\nĐịnh danh\tKhông nối chuyển giữa hai ICU stay\nMiền giá trị\ts: 0–74, a: 0–24, terminal: 75/76\nTrình tự\ttime_step liên tiếp, next_state nối đúng\nKết thúc\tMột done cuối episode, next_state cuối là terminal\nThuật toán\t19 ca hồi quy trong test_regressions.py","rows":6,"cols":2},
+{"id":"sh/ds3utgnu","kind":"textbox","name":"text-4","position":{"left":64,"top":583,"width":1140,"height":65},"text":"Kiểm thử phần mềm không thay thế kiểm chứng lâm sàng","style":{"fontSize":30.67,"typeface":"Arial","color":"#8C2835","alignment":"left"},"geometry":"rect","lineWidth":0}
+]}

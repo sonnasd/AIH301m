@@ -1,0 +1,10 @@
+{"schema":"openai.presentation.layout/v5","unit":"px","slide":{"id":"sl/v9gchy","index":18,"layout":{"id":"ly/gvm50f21","name":"Blank"},"backgroundColor":"rgba(255,255,255,1)","position":{"left":0,"top":0,"width":1280,"height":720}},
+"elements":[
+{"id":"sh/m50rylcz","kind":"textbox","name":"text-1","position":{"left":64,"top":44,"width":1152,"height":90},"text":"Chính sách ổn định sau ba vòng","style":{"fontSize":45.33,"typeface":"Arial","color":"#263238","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/9srq90ba","kind":"textbox","name":"text-2","position":{"left":64,"top":660,"width":1050,"height":42},"text":"Mô phỏng: artifacts/ai_policy.json, history và value_scope","style":{"fontSize":16,"typeface":"Arial","color":"#58656A","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/ori90vup","kind":"textbox","name":"text-3","position":{"left":1160,"top":662,"width":56,"height":24},"text":"19","style":{"fontSize":16,"typeface":"Arial","color":"#58656A","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"ch/ne54f2hc","kind":"chart","position":{"left":64,"top":170,"width":730,"height":390},"chartType":"bar","title":"Số trạng thái đổi hành động"},
+{"id":"sh/at0r2lcv","kind":"textbox","name":"text-4","position":{"left":850,"top":193,"width":360,"height":48},"text":"V trung bình train","style":{"fontSize":32,"typeface":"Arial","color":"#087F83","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/xwbqd0bm","kind":"textbox","name":"text-5","position":{"left":850,"top":262,"width":360,"height":260},"text":"Policy Iteration\n86,28\n\nTD hành vi\n80,99","style":{"fontSize":32,"typeface":"Arial","color":"#263238","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/wvi94vu1","kind":"textbox","name":"text-6","position":{"left":64,"top":594,"width":1150,"height":54},"text":"Trung bình trạng thái train không phải OPE hoặc return test","style":{"fontSize":29.33,"typeface":"Arial","color":"#8C2835","alignment":"left"},"geometry":"rect","lineWidth":0}
+]}

@@ -1,0 +1,10 @@
+{"schema":"openai.presentation.layout/v5","unit":"px","slide":{"id":"sl/buisxj","index":16,"layout":{"id":"ly/gvm50f21","name":"Blank"},"backgroundColor":"rgba(255,255,255,1)","position":{"left":0,"top":0,"width":1280,"height":720}},
+"elements":[
+{"id":"sh/f61sjexk","kind":"textbox","name":"text-1","position":{"left":64,"top":44,"width":1152,"height":90},"text":"Ví dụ Bellman với hai hành động","style":{"fontSize":45.33,"typeface":"Arial","color":"#263238","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/07atcje5","kind":"textbox","name":"text-2","position":{"left":64,"top":660,"width":1050,"height":42},"text":"Ví dụ toán học giả định của nhóm, công thức: member_2_rl/policy_iteration.py","style":{"fontSize":16,"typeface":"Arial","color":"#58656A","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/18jalofq","kind":"textbox","name":"text-3","position":{"left":1160,"top":662,"width":56,"height":24},"text":"17","style":{"fontSize":16,"typeface":"Arial","color":"#58656A","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/q18r69w3","kind":"textbox","name":"text-4","position":{"left":64,"top":148,"width":1140,"height":50},"text":"Giả định: γ = 0,99 và V cũ(s) = 60","style":{"fontSize":30.67,"typeface":"Arial","color":"#8C2835","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"tb/2lcfux4n","kind":"table","position":{"left":64,"top":224,"width":1152,"height":213},"text":"Hành động\tCác chuyển có thể xảy ra\tQ hiện tại\nA\t0,5 về s và 0,5 sống\t79,7\nB\t0,8 sống và 0,2 tử vong\t60","rows":3,"cols":3},
+{"id":"sh/s3q98jet","kind":"textbox","name":"text-5","position":{"left":64,"top":480,"width":1140,"height":110},"text":"Q(A) = 0,5 × 0,99 × 60 + 0,5 × 100 = 79,7\nQ(B) = 0,8 × 100 − 0,2 × 100 = 60","style":{"fontSize":32,"typeface":"Arial","color":"#087F83","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/d4jahofe","kind":"textbox","name":"text-6","position":{"left":64,"top":610,"width":1140,"height":36},"text":"Lần cải thiện này chọn A","style":{"fontSize":29.33,"typeface":"Arial","color":"#263238","alignment":"left"},"geometry":"rect","lineWidth":0}
+]}

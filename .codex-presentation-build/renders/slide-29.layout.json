@@ -1,0 +1,9 @@
+{"schema":"openai.presentation.layout/v5","unit":"px","slide":{"id":"sl/zvz3q3","index":28,"layout":{"id":"ly/gvm50f21","name":"Blank"},"backgroundColor":"rgba(255,255,255,1)","position":{"left":0,"top":0,"width":1280,"height":720}},
+"elements":[
+{"id":"sh/buh8jy5w","kind":"textbox","name":"text-1","position":{"left":64,"top":44,"width":1152,"height":90},"text":"Phụ lục A: ký hiệu và nghiệm Bellman","style":{"fontSize":45.33,"typeface":"Arial","color":"#263238","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/cvq9s3mh","kind":"textbox","name":"text-2","position":{"left":64,"top":660,"width":1050,"height":42},"text":"Ví dụ toán học giả định, member_2_rl/policy_iteration.py","style":{"fontSize":16,"typeface":"Arial","color":"#58656A","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/xwzql8nm","kind":"textbox","name":"text-3","position":{"left":1160,"top":662,"width":56,"height":24},"text":"29","style":{"fontSize":16,"typeface":"Arial","color":"#58656A","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"tb/rihobexw","kind":"table","position":{"left":64,"top":162,"width":1152,"height":228},"text":"Ký hiệu\tDiễn giải\ns, a, s′\tTrạng thái, hành động, trạng thái kế tiếp\nT, R, γ\tXác suất chuyển, reward, hệ số chiết khấu\nVπ(s), Qπ(s,a)\tGiá trị trạng thái và giá trị thử hành động","rows":4,"cols":2},
+{"id":"sh/n6h8fy5k","kind":"textbox","name":"text-4","position":{"left":64,"top":437,"width":1150,"height":112},"text":"V_A = 0,5 × 0,99V_A + 50\nV_A = 50 / (1 − 0,495) ≈ 99,01","style":{"fontSize":37.33,"typeface":"Arial","color":"#087F83","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/o7q9o3m5","kind":"textbox","name":"text-5","position":{"left":64,"top":586,"width":1140,"height":60},"text":"Q(A) = 79,7 ở slide 17 là một lần cập nhật từ V cũ = 60","style":{"fontSize":29.33,"typeface":"Arial","color":"#263238","alignment":"left"},"geometry":"rect","lineWidth":0}
+]}

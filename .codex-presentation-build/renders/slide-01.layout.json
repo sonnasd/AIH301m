@@ -1,0 +1,9 @@
+{"schema":"openai.presentation.layout/v5","unit":"px","slide":{"id":"sl/6hezol","index":0,"layout":{"id":"ly/gvm50f21","name":"Blank"},"backgroundColor":"rgba(255,255,255,1)","position":{"left":0,"top":0,"width":1280,"height":720}},
+"elements":[
+{"id":"sh/knihcvex","kind":"textbox","name":"text-1","position":{"left":64,"top":44,"width":1152,"height":90},"text":"AI Clinician","style":{"fontSize":45.33,"typeface":"Arial","color":"#263238","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/jm9g3adc","kind":"textbox","name":"text-2","position":{"left":64,"top":660,"width":1050,"height":42},"text":"AIH301m, Tài liệu dự án và cohort_manifest.json","style":{"fontSize":16,"typeface":"Arial","color":"#58656A","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/yl0za5wr","kind":"textbox","name":"text-3","position":{"left":1160,"top":662,"width":56,"height":24},"text":"01","style":{"fontSize":16,"typeface":"Arial","color":"#58656A","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/xkry10v6","kind":"textbox","name":"text-4","position":{"left":64,"top":166,"width":1120,"height":100},"text":"Học chính sách dịch truyền và thuốc vận mạch\ncho bài toán sepsis trong ICU","style":{"fontSize":40,"typeface":"Arial","color":"#087F83","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"tb/lsfaxovq","kind":"table","position":{"left":64,"top":322,"width":1152,"height":240},"text":"Thành viên\tPhần phụ trách\tSlide\nBùi Đức Giang\tMember 1: dữ liệu\t1–9\nNguyễn Huy Sơn\tMember 2: học tăng cường (RL)\t10–20\nCường\tMember 3: đánh giá\t21–28","rows":4,"cols":3},
+{"id":"sh/bypgzqd0","kind":"textbox","name":"text-5","position":{"left":64,"top":596,"width":1100,"height":40},"text":"Bản triển khai mô phỏng phục vụ học tập","style":{"fontSize":28,"typeface":"Arial","color":"#8C2835","alignment":"left"},"geometry":"rect","lineWidth":0}
+]}

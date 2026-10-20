@@ -1,0 +1,9 @@
+{"schema":"openai.presentation.layout/v5","unit":"px","slide":{"id":"sl/dlzzoh","index":6,"layout":{"id":"ly/gvm50f21","name":"Blank"},"backgroundColor":"rgba(255,255,255,1)","position":{"left":0,"top":0,"width":1280,"height":720}},
+"elements":[
+{"id":"sh/36lkjqto","kind":"textbox","name":"text-1","position":{"left":64,"top":44,"width":1152,"height":90},"text":"Chia theo bệnh nhân, fit chỉ trên train","style":{"fontSize":45.33,"typeface":"Arial","color":"#263238","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/47u1sva9","kind":"textbox","name":"text-2","position":{"left":64,"top":660,"width":1050,"height":42},"text":"Mô phỏng: data/trajectories_{train,val,test}.csv, member_1_data/preprocessor.py","style":{"fontSize":16,"typeface":"Arial","color":"#58656A","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/58n2l0bu","kind":"textbox","name":"text-3","position":{"left":1160,"top":662,"width":56,"height":24},"text":"07","style":{"fontSize":16,"typeface":"Arial","color":"#58656A","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"tb/jap43m9o","kind":"table","position":{"left":64,"top":160,"width":1152,"height":294},"text":"Tập\tBệnh nhân\tChuyển trạng thái\tVai trò\nTrain\t420\t5.496\tHọc biểu diễn và policy\nValidation\t90\t1.173\tPhân tích độ nhạy\nTest\t90\t1.171\tBáo cáo giữ lại","rows":4,"cols":4},
+{"id":"sh/v2lkf6tc","kind":"textbox","name":"text-4","position":{"left":64,"top":507,"width":1140,"height":60},"text":"Median, scaler và K-means: fit trên 420 bệnh nhân train","style":{"fontSize":32,"typeface":"Arial","color":"#087F83","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/g3u1obax","kind":"textbox","name":"text-5","position":{"left":64,"top":582,"width":1140,"height":40},"text":"Validation và test chỉ dùng transform","style":{"fontSize":29.33,"typeface":"Arial","color":"#263238","alignment":"left"},"geometry":"rect","lineWidth":0}
+]}
